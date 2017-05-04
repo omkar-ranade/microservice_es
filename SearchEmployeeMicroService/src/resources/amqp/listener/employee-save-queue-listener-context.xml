@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	  http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	  http://www.springframework.org/schema/rabbit
+	  http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+	<!-- Update the host and username/password details during integration -->
+	<rabbit:connection-factory id="connectionFactory"
+		host="localhost" username="guest" password="guest" />
+
+	<rabbit:admin connection-factory="connectionFactory" />
+
+	<rabbit:queue id="employeeSaveQueue" name="employeeSaveQueue"
+		auto-delete="false" durable="true" />
+
+	<bean id="asyncListener" class="amqp.listener.EmployeeSaveQueueListener" />
+
+	<rabbit:listener-container id="myListenerContainer"
+		connection-factory="connectionFactory">
+		<rabbit:listener ref="asyncListener" queues="employeeSaveQueue" />
+	</rabbit:listener-container>
+
+	<rabbit:topic-exchange id="employeeSaveExchange"
+		name="employeeSaveExchange">
+		<rabbit:bindings>
+			<rabbit:binding queue="employeeSaveQueue" pattern="employeeSavedKey">
+			</rabbit:binding>
+		</rabbit:bindings>
+	</rabbit:topic-exchange>
+
+</beans>
