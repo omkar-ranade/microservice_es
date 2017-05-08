@@ -1,15 +1,10 @@
 package com.searchemployeeservice.bean;
 
-import java.util.Date;
-
-import org.springframework.data.elasticsearch.annotations.Document;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Document(indexName = "employee")
 public class Employee {
 
-@JsonProperty("empId")
+	@JsonProperty("empId")
 	private String empId;
 
 	@JsonProperty("empFirstName")
@@ -18,19 +13,11 @@ public class Employee {
 	@JsonProperty("empLastName")
 	private String empLastName;
 
-	@JsonProperty("dob")
-	private Date dob;
+	@JsonProperty("emailId")
+	private String emailId;
 
-	public Date getDob() {
-		return dob;
-	}
-
-	public void setDob(Date dob) {
-		this.dob = dob;
-	}
-
-	@JsonProperty("city")
-	private String city;
+	@JsonProperty("phoneNo")
+	private Long phoneNo;
 
 	public String getEmpId() {
 		return empId;
@@ -56,12 +43,20 @@ public class Employee {
 		this.empLastName = empLastName;
 	}
 
-	public String getCity() {
-		return city;
+	public String getEmailId() {
+		return emailId;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setEmailID(String emailId) {
+		this.emailId = emailId;
+	}
+
+	public Long getPhoneNo() {
+		return phoneNo;
+	}
+
+	public void setPhoneNo(Long phoneNo) {
+		this.phoneNo = phoneNo;
 	}
 
 	@Override
@@ -73,10 +68,10 @@ public class Employee {
 		builder.append(empFirstName);
 		builder.append(", empLastName=");
 		builder.append(empLastName);
-		builder.append(", dob=");
-		builder.append(dob);
-		builder.append(", city=");
-		builder.append(city);
+		builder.append(", emailId=");
+		builder.append(emailId);
+		builder.append(", phoneNo=");
+		builder.append(phoneNo);
 		builder.append("]");
 		return builder.toString();
 	}
