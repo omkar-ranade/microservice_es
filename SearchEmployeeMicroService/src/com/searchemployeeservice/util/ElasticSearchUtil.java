@@ -12,9 +12,7 @@ import io.searchbox.indices.IndicesExists;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,13 +82,13 @@ public class ElasticSearchUtil {
 				"*" + criteria + "*"));
 		employeeMap.putAll(getSearchResults(searchSourceBuilder));
 
-		// city search
-		searchSourceBuilder.query(QueryBuilders.wildcardQuery("city", "*"
+		// email id search
+		searchSourceBuilder.query(QueryBuilders.wildcardQuery("emailId", "*"
 				+ criteria + "*"));
 		employeeMap.putAll(getSearchResults(searchSourceBuilder));
 
 		List<Employee> list = new ArrayList<Employee>(employeeMap.values());
-
+		
 		return list;
 	}
 
@@ -110,14 +108,8 @@ public class ElasticSearchUtil {
 			emp.setEmpId(hit.source.getEmpId());
 			emp.setEmpFirstName(hit.source.getEmpFirstName());
 			emp.setEmpLastName(hit.source.getEmpLastName());
-			emp.setCity(hit.source.getCity());
-
-			SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-			String dt = format.format(hit.source.getDob());
-
-			Date date = format.parse(dt);
-
-			emp.setDob(date);
+			emp.setEmailID(hit.source.getEmailId());
+			emp.setPhoneNo(hit.source.getPhoneNo());
 
 			employeeMap.put(emp.getEmpId(), emp);
 		}
@@ -161,8 +153,8 @@ public class ElasticSearchUtil {
 		jsonDocument.put("empId", emp.getEmpId());
 		jsonDocument.put("empFirstName", emp.getEmpFirstName());
 		jsonDocument.put("empLastName", emp.getEmpLastName());
-		jsonDocument.put("city", emp.getCity());
-		jsonDocument.put("dob", emp.getDob());
+		jsonDocument.put("emailId", emp.getEmailId());
+		jsonDocument.put("phoneNo", emp.getPhoneNo());
 		return jsonDocument;
 	}
 }
