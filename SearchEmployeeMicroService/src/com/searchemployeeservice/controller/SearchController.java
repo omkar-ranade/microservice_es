@@ -3,6 +3,7 @@ package com.searchemployeeservice.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class SearchController {
 	@Autowired
 	IElasticSearchSaveService elasticSearchSaveService; 
 
+	@CrossOrigin
 	@RequestMapping(value = "/searchEmployee/{searchString}", method = RequestMethod.GET)
 	public @ResponseBody
 	List<Employee> getEmployee(@PathVariable("searchString") String searchString) {
@@ -31,8 +33,8 @@ public class SearchController {
 		try {
 			empLst = elasticSearchService.searchEmployee(searchString);
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
 			System.out.println("Error for EMPLOYEE SEARCH" + e1);
+			throw new RuntimeException(e1);
 		}
 
 		if (empLst != null && !empLst.isEmpty()) {
@@ -44,6 +46,7 @@ public class SearchController {
 		return empLst;
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/saveEmployee", method = RequestMethod.PUT)
 	public void saveEmployee(@RequestBody Employee employee) {
 		System.out.println("Employee id " + employee.getEmpId());
