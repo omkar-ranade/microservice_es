@@ -2,6 +2,8 @@ package com.searchemployeeservice.controller;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +20,9 @@ import com.searchemployeeservice.service.IElasticSearchService;
 @RestController
 public class SearchController {
 
+	final Logger log = Logger.getLogger(SearchController.class);
+	boolean isInfo = log.isInfoEnabled();
+	
 	@Autowired
 	IElasticSearchService elasticSearchService;
 	
@@ -28,35 +33,39 @@ public class SearchController {
 	@RequestMapping(value = "/searchEmployee/{searchString}", method = RequestMethod.GET)
 	public @ResponseBody
 	List<Employee> getEmployee(@PathVariable("searchString") String searchString) {
-		System.out.println("URI parameter :" + searchString);
+		if(isInfo)
+			log.info("Method Started");
 		List<Employee> empLst = null;
 		try {
 			empLst = elasticSearchService.searchEmployee(searchString);
 		} catch (Exception e1) {
-			System.out.println("Error for EMPLOYEE SEARCH" + e1);
+			log.error("Error for EMPLOYEE SEARCH" + e1);
 			throw new RuntimeException(e1);
 		}
 
 		if (empLst != null && !empLst.isEmpty()) {
 			for (Employee e : empLst) {
-				System.out.println("Employee Details ---- " + e.toString());
+				log.info("Employee Details ---- " + e.toString());
 			}
 		}
-
+		
+		if(isInfo)
+			log.info("Method Exit");
 		return empLst;
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/saveEmployee", method = RequestMethod.PUT)
 	public void saveEmployee(@RequestBody Employee employee) {
-		System.out.println("Employee id " + employee.getEmpId());
+		if(isInfo)
+			log.info("Entering");
 		try {
 			elasticSearchSaveService.saveEmployeeDetails(employee);
 		} catch (Exception e1) {
-			System.out.println("Error for EMPLOYEE SEARCH" + e1);
+			log.error("Error for EMPLOYEE SEARCH" + e1);
 			throw new RuntimeException(e1);
 		}
-		System.out.println("Employee saved.");
-
+		if(isInfo)
+			log.info("Exiting");
 	}
 }
