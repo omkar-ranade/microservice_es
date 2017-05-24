@@ -17,18 +17,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import com.searchemployeeservice.bean.Employee;
+import com.searchemployeeservice.controller.SearchController;
 
 public class ElasticSearchUtil {
 
 	private static final String INDEX = "employees";
 
 	private static JestClient client = null;
+	
+	final static Logger log = Logger.getLogger(ElasticSearchUtil.class);
+	static boolean isInfo = log.isInfoEnabled();
 
 	private static JestClient getClient() throws Exception {
+		if(isInfo)
+			log.info("Method Started");
 		if (client == null) {
 
 			JestClientFactory factory = new JestClientFactory();
@@ -39,13 +46,19 @@ public class ElasticSearchUtil {
 
 			boolean indexExists = jestClient.execute(
 					new IndicesExists.Builder(".kibana").build()).isSucceeded();
-
+			
+			log.info("IndexExist : "+indexExists);
+			
 			if (!indexExists) {
+				log.error("Index " + INDEX + " not found in elasticsearch.");	
 				throw new Exception("Index " + INDEX
 						+ " not found in elasticsearch.");
 			}
 			client = jestClient;
 		}
+		if(isInfo)
+			log.info("Method Exit");
+		
 		return client;
 	}
 
@@ -60,6 +73,8 @@ public class ElasticSearchUtil {
 	 */
 	public static List<Employee> searchEmployee(String criteria)
 			throws Exception {
+		if(isInfo)
+			log.info("Method Started");
 		if (client == null) {
 			client = getClient();
 		}
@@ -89,6 +104,9 @@ public class ElasticSearchUtil {
 
 		List<Employee> list = new ArrayList<Employee>(employeeMap.values());
 		
+		if(isInfo)
+			log.info("Method Exit");
+		
 		return list;
 	}
 
@@ -96,6 +114,9 @@ public class ElasticSearchUtil {
 			SearchSourceBuilder searchSourceBuilder) throws IOException,
 			ParseException {
 
+		if(isInfo)
+			log.info("Method Started");
+		
 		Search search = new Search.Builder(searchSourceBuilder.toString())
 				.addIndex(".kibana").addType("employee").build();
 
@@ -114,6 +135,8 @@ public class ElasticSearchUtil {
 			employeeMap.put(emp.getEmpId(), emp);
 		}
 
+		if(isInfo)
+			log.info("Method Exit");
 		return employeeMap;
 	}
 
@@ -126,6 +149,9 @@ public class ElasticSearchUtil {
 	 * @throws Exception
 	 */
 	public static void saveEmployee(Employee employee) throws Exception {
+		if(isInfo)
+			log.info("Method Started");
+		
 		if (client == null) {
 			client = getClient();
 		}
@@ -136,7 +162,10 @@ public class ElasticSearchUtil {
 				.type("employee").build();
 		DocumentResult result = client.execute(index);
 
-		System.out.println(result.getResponseCode());
+		log.info("Response code -"+ result.getResponseCode());
+		
+		if(isInfo)
+			log.info("Method exit");
 
 	}
 
