@@ -15,13 +15,7 @@ public class ElasticSearchService implements IElasticSearchService,
 
 	private static IElasticSearchSaveService saveService;
 
-	/**
-	 * Private Constructor.
-	 */
-	private ElasticSearchService() {
-
-	}
-
+	
 	/**
 	 * Method to get static {@link IElasticSearchService} instance.
 	 * 
