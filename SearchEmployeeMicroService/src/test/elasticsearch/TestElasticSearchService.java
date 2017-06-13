@@ -5,22 +5,24 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-import org.springframework.stereotype.Component;
 import org.apache.log4j.Logger;
-import com.searchemployeeservice.bean.Employee;
+import org.junit.Test;
+
+import com.searchemployeeservice.bean.Customer;
 import com.searchemployeeservice.service.ElasticSearchService;
 
 public class TestElasticSearchService {
 
-	ElasticSearchService elasticSearchService = new ElasticSearchService();
 	final Logger log = Logger.getLogger(TestElasticSearchService.class);
+	
+	ElasticSearchService elasticSearchService = new ElasticSearchService();
+	
 	@Test
 	public void searchEmployeeTest(){
 		try {
-			List<Employee> empList =  elasticSearchService.searchEmployee("010");
-			List<Employee> empListExpected = new ArrayList<Employee>();
-			Employee e = new Employee();
+			List<Customer> empList =  elasticSearchService.searchEmployee("010");
+			List<Customer> empListExpected = new ArrayList<>();
+			Customer e = new Customer();
 			e.setEmpFirstName("Monica");
 			e.setEmailID("monica.gellar@friends.com");
 			e.setEmpId("010");
@@ -38,7 +40,7 @@ public class TestElasticSearchService {
 	
 	@Test
 	public void saveEmployeeDetails(){
-		Employee expected = new Employee();
+		Customer expected = new Customer();
 		expected.setEmpFirstName("Shardul");
 		expected.setEmailID("Shardul.B@friends.com");
 		expected.setEmpId("999");
@@ -47,7 +49,7 @@ public class TestElasticSearchService {
 		
 		try {
 			elasticSearchService.saveEmployeeDetails(expected);
-			List<Employee> empList =  elasticSearchService.searchEmployee("999");
+			List<Customer> empList =  elasticSearchService.searchEmployee("999");
 			assertEquals(expected.getEmpId(),empList.get(0).getEmpId());
 			assertEquals(expected.getEmpFirstName(),empList.get(0).getEmpFirstName());
 		} catch (Exception e1) {

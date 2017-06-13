@@ -1,6 +1,7 @@
 package com.searchemployeeservice.service;
 
-import com.searchemployeeservice.bean.Employee;
+import com.searchemployeeservice.bean.Customer;
+
 
 public interface IElasticSearchSaveService {
 
@@ -10,10 +11,10 @@ public interface IElasticSearchSaveService {
 	 * id on successful save operation.
 	 * 
 	 * @param employee
-	 *            {@link Employee} details retrieved from Mongo DB
+	 *            {@link Customer} details retrieved from Mongo DB
 	 * @return {@link String} employee id after saving the details in
 	 *         ElasticSearch
 	 * @throws Exception
 	 */
-	void saveEmployeeDetails(Employee employee) throws Exception;
+	void saveEmployeeDetails(Customer employee) throws Exception;
 }

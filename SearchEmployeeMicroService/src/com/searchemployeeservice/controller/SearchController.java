@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.searchemployeeservice.bean.Employee;
+import com.searchemployeeservice.bean.Customer;
 import com.searchemployeeservice.service.IElasticSearchSaveService;
 import com.searchemployeeservice.service.IElasticSearchService;
+import com.searchemployeeservice.util.IApplicationConstant;
 
 @RestController
 public class SearchController {
@@ -31,10 +32,10 @@ public class SearchController {
 	@CrossOrigin
 	@RequestMapping(value = "/searchEmployee/{searchString}", method = RequestMethod.GET)
 	public @ResponseBody
-	List<Employee> getEmployee(@PathVariable("searchString") String searchString) {
+	List<Customer> getEmployee(@PathVariable("searchString") String searchString) {
 		if(isInfo)
-			log.info("Method Started");
-		List<Employee> empLst = null;
+			log.info(IApplicationConstant.METHOD_STARTED);
+		List<Customer> empLst = null;
 		try {
 			empLst = elasticSearchService.searchEmployee(searchString);
 		} catch (Exception e1) {
@@ -43,19 +44,19 @@ public class SearchController {
 		}
 
 		if (empLst != null && !empLst.isEmpty()) {
-			for (Employee e : empLst) {
+			for (Customer e : empLst) {
 				log.info("Employee Details ---- " + e.toString());
 			}
 		}
 		
 		if(isInfo)
-			log.info("Method Exit");
+			log.info(IApplicationConstant.METHOD_EXIT);
 		return empLst;
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/saveEmployee", method = RequestMethod.PUT)
-	public void saveEmployee(@RequestBody Employee employee) {
+	public void saveEmployee(@RequestBody Customer employee) {
 		if(isInfo)
 			log.info("Entering");
 		try {

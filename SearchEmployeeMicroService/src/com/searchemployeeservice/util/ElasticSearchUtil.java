@@ -21,8 +21,7 @@ import org.apache.log4j.Logger;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-import com.searchemployeeservice.bean.Employee;
-
+import com.searchemployeeservice.bean.Customer;
 
 public class ElasticSearchUtil {
 
@@ -30,12 +29,12 @@ public class ElasticSearchUtil {
 
 	private static JestClient client = null;
 	
-	final static Logger log = Logger.getLogger(ElasticSearchUtil.class);
+	static final Logger log = Logger.getLogger(ElasticSearchUtil.class);
 	static boolean isInfo = log.isInfoEnabled();
 
 	private static JestClient getClient() throws Exception {
 		if(isInfo)
-			log.info("Method Started");
+			log.info(IApplicationConstant.METHOD_STARTED);
 		if (client == null) {
 
 			JestClientFactory factory = new JestClientFactory();
@@ -45,7 +44,7 @@ public class ElasticSearchUtil {
 			JestClient jestClient = factory.getObject();
 
 			boolean indexExists = jestClient.execute(
-					new IndicesExists.Builder(".kibana").build()).isSucceeded();
+					new IndicesExists.Builder(IApplicationConstant.ELASTIC_SEARCH_INDEX).build()).isSucceeded();
 			
 			log.info("IndexExist : "+indexExists);
 			
@@ -57,7 +56,7 @@ public class ElasticSearchUtil {
 			client = jestClient;
 		}
 		if(isInfo)
-			log.info("Method Exit");
+			log.info(IApplicationConstant.METHOD_EXIT);
 		
 		return client;
 	}
@@ -68,23 +67,22 @@ public class ElasticSearchUtil {
 	 * 
 	 * @param criteria
 	 *            Employee id as search criteria
-	 * @return {@link Employee} data as JSON Format
+	 * @return {@link Customer} data as JSON Format
 	 * @throws Exception
 	 */
-	public static List<Employee> searchEmployee(String criteria)
+	public static List<Customer> searchEmployee(String criteria)
 			throws Exception {
 		if(isInfo)
-			log.info("Method Started");
+			log.info(IApplicationConstant.METHOD_STARTED);
 		if (client == null) {
 			client = getClient();
 		}
 
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		Map<String, Employee> employeeMap = new HashMap<>();
+		Map<String, Customer> employeeMap = new HashMap<>();
 
 		// emp id search
-		searchSourceBuilder.query(QueryBuilders.wildcardQuery("empId", "*"
-				+ criteria + "*"));
+		searchSourceBuilder.query(QueryBuilders.wildcardQuery("empId", criteria));
 		employeeMap.putAll(getSearchResults(searchSourceBuilder));
 
 		// emp first name search
@@ -102,29 +100,29 @@ public class ElasticSearchUtil {
 				+ criteria + "*"));
 		employeeMap.putAll(getSearchResults(searchSourceBuilder));
 
-		List<Employee> list = new ArrayList<Employee>(employeeMap.values());
+		List<Customer> list = new ArrayList<Customer>(employeeMap.values());
 		
 		if(isInfo)
-			log.info("Method Exit");
+			log.info(IApplicationConstant.METHOD_EXIT);
 		
 		return list;
 	}
 
-	private static Map<String, Employee> getSearchResults(
+	private static Map<String, Customer> getSearchResults(
 			SearchSourceBuilder searchSourceBuilder) throws IOException,
 			ParseException {
 
 		if(isInfo)
-			log.info("Method Started");
+			log.info(IApplicationConstant.METHOD_STARTED);
 		
 		Search search = new Search.Builder(searchSourceBuilder.toString())
-				.addIndex(".kibana").addType("employee").build();
+				.addIndex(IApplicationConstant.ELASTIC_SEARCH_INDEX).addType("employee").build();
 
 		SearchResult result = client.execute(search);
 
-		Map<String, Employee> employeeMap = new HashMap<>();
-		for (Hit<Employee, Void> hit : result.getHits(Employee.class)) {
-			Employee emp = new Employee();
+		Map<String, Customer> employeeMap = new HashMap<>();
+		for (Hit<Customer, Void> hit : result.getHits(Customer.class)) {
+			Customer emp = new Customer();
 
 			emp.setEmpId(hit.source.getEmpId());
 			emp.setEmpFirstName(hit.source.getEmpFirstName());
@@ -136,7 +134,7 @@ public class ElasticSearchUtil {
 		}
 
 		if(isInfo)
-			log.info("Method Exit");
+			log.info(IApplicationConstant.METHOD_EXIT);
 		return employeeMap;
 	}
 
@@ -144,13 +142,13 @@ public class ElasticSearchUtil {
 	 * Method to save the employee data into Elastic Search database
 	 * 
 	 * @param employee
-	 *            {@link Employee} object data
+	 *            {@link Customer} object data
 	 * @return status of the operation as success/failure
 	 * @throws Exception
 	 */
-	public static void saveEmployee(Employee employee) throws Exception {
+	public static void saveEmployee(Customer employee) throws Exception {
 		if(isInfo)
-			log.info("Method Started");
+			log.info(IApplicationConstant.METHOD_STARTED);
 		
 		if (client == null) {
 			client = getClient();
@@ -158,26 +156,26 @@ public class ElasticSearchUtil {
 
 		Map<String, Object> source = createJsonDocument(employee);
 
-		Index index = new Index.Builder(source).index(".kibana")
+		Index index = new Index.Builder(source).index(IApplicationConstant.ELASTIC_SEARCH_INDEX)
 				.type("employee").build();
 		DocumentResult result = client.execute(index);
 
 		log.info("Response code -"+ result.getResponseCode());
 		
 		if(isInfo)
-			log.info("Method exit");
+			log.info(IApplicationConstant.METHOD_EXIT);
 
 	}
 
 	/**
 	 * Method to create {@link Map} of JSON fields and values for the
-	 * {@link Employee} object
+	 * {@link Customer} object
 	 * 
 	 * @param emp
-	 *            {@link Employee} data
+	 *            {@link Customer} data
 	 * @return {@link Map} of JSON fields and values
 	 */
-	public static Map<String, Object> createJsonDocument(Employee emp) {
+	public static Map<String, Object> createJsonDocument(Customer emp) {
 		Map<String, Object> jsonDocument = new HashMap<String, Object>();
 		jsonDocument.put("empId", emp.getEmpId());
 		jsonDocument.put("empFirstName", emp.getEmpFirstName());

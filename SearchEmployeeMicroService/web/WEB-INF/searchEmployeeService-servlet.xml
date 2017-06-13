@@ -15,7 +15,6 @@
 	<mvc:annotation-driven/>
 	<!-- <import resource="springMongoConfig.xml"/>	 -->
 	<!-- <import resource="SpringSecurity.xml"/> -->
-	
 	<context:component-scan base-package="com.searchemployeeservice.*"/>
 	
 	<!-- Configuring HTTP Message Convertor -->

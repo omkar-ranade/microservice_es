@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.searchemployeeservice.bean.Employee;
+import com.searchemployeeservice.bean.Customer;
 import com.searchemployeeservice.util.ElasticSearchUtil;
 
 @Service
@@ -15,7 +15,13 @@ public class ElasticSearchService implements IElasticSearchService,
 
 	private static IElasticSearchSaveService saveService;
 
-	
+	/**
+	 * Private Constructor.
+	 */
+	/*public ElasticSearchService() {
+
+	}*/
+
 	/**
 	 * Method to get static {@link IElasticSearchService} instance.
 	 * 
@@ -43,8 +49,8 @@ public class ElasticSearchService implements IElasticSearchService,
 	 * elasticsearch.service.IElasticSearchService#searchEmployee(java.lang.
 	 * String)
 	 */
-	public List<Employee> searchEmployee(String criteria) throws Exception {
-		List<Employee> empList;
+	public List<Customer> searchEmployee(String criteria) throws Exception {
+		List<Customer> empList;
 		empList = ElasticSearchUtil.searchEmployee(criteria);
 		return empList;
 	}
@@ -52,7 +58,7 @@ public class ElasticSearchService implements IElasticSearchService,
 	/* (non-Javadoc)
 	 * @see elasticsearch.service.IElasticSearchSaveService#saveEmployeeDetails(bean.Employee)
 	 */
-	public void saveEmployeeDetails(Employee employee) throws Exception {
+	public void saveEmployeeDetails(Customer employee) throws Exception {
 
 		ElasticSearchUtil.saveEmployee(employee);
 	}

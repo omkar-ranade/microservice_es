@@ -2,7 +2,7 @@ package com.searchemployeeservice.service;
 
 import java.util.List;
 
-import com.searchemployeeservice.bean.Employee;
+import com.searchemployeeservice.bean.Customer;
 
 
 public interface IElasticSearchService {
@@ -16,6 +16,6 @@ public interface IElasticSearchService {
 	 * @return JSON format String employee search results
 	 * @throws Exception 
 	 */
-	public List<Employee> searchEmployee(String criteria) throws Exception;
+	public List<Customer> searchEmployee(String criteria) throws Exception;
 
 }
