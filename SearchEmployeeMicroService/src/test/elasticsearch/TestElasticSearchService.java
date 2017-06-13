@@ -7,15 +7,14 @@ import java.util.List;
 
 import org.junit.Test;
 import org.springframework.stereotype.Component;
-
+import org.apache.log4j.Logger;
 import com.searchemployeeservice.bean.Employee;
 import com.searchemployeeservice.service.ElasticSearchService;
 
-@Component
 public class TestElasticSearchService {
 
 	ElasticSearchService elasticSearchService = new ElasticSearchService();
-	
+	final Logger log = Logger.getLogger(TestElasticSearchService.class);
 	@Test
 	public void searchEmployeeTest(){
 		try {
@@ -33,7 +32,7 @@ public class TestElasticSearchService {
 			assertEquals(empListExpected.get(0).getEmpId(),empList.get(0).getEmpId());
 			assertEquals(empListExpected.get(0).getEmpFirstName(),empList.get(0).getEmpFirstName());
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 	
@@ -52,7 +51,7 @@ public class TestElasticSearchService {
 			assertEquals(expected.getEmpId(),empList.get(0).getEmpId());
 			assertEquals(expected.getEmpFirstName(),empList.get(0).getEmpFirstName());
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			log.error(e1);
 		}
 	}
 }
