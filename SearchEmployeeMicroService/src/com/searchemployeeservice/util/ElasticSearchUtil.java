@@ -22,7 +22,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import com.searchemployeeservice.bean.Employee;
-import com.searchemployeeservice.controller.SearchController;
+
 
 public class ElasticSearchUtil {
 
