@@ -3,7 +3,6 @@ package com.searchemployeeservice.dataretriever;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-//import com.caucho.hessian.client.HessianProxyFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.searchemployeeservice.bean.Employee;
